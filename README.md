@@ -29,20 +29,28 @@
 
 ## Navigation
 
+- [Navigation](#navigation)
 - [Updates](#updates)
-- [What and Why](#what-and-why)
+- [Intro videos](#intro-videos)
+- [What and why](#what-and-why)
 - [Philosophy](#philosophy)
   - [Breaking problems into components](#breaking-problems-into-components)
   - [Too many prompts](#too-many-prompts)
-  - [The Fabric approach to prompting](#our-approach-to-prompting)
-- [Installation](#Installation)
-  - [Migration](#Migration)
-  - [Upgrading](#Upgrading)
-- [Usage](#Usage)
+- [Installation](#installation)
+  - [Get Latest Release Binaries](#get-latest-release-binaries)
+  - [From Source](#from-source)
+  - [Environment Variables](#environment-variables)
+  - [Setup](#setup)
+  - [Migration](#migration)
+  - [Upgrading](#upgrading)
+- [Usage](#usage)
+- [Our approach to prompting](#our-approach-to-prompting)
 - [Examples](#examples)
-  - [Just use the Patterns](#just-use-the-patterns)
+- [Just use the Patterns](#just-use-the-patterns)
 - [Custom Patterns](#custom-patterns)
 - [Helper Apps](#helper-apps)
+  - [`to_pdf`](#to_pdf)
+  - [`to_pdf` Installation](#to_pdf-installation)
 - [pbpaste](#pbpaste)
 - [Meta](#meta)
   - [Primary contributors](#primary-contributors)
@@ -52,24 +60,25 @@
 ## Updates
 
 > [!NOTE]
-September 15, 2024 — Lots of new stuff!
-> * Fabric now supports calling the new `o1-preview` model using the `-r` switch (which stands for raw. Normal queries won't work with `o1-preview` because they disabled System access and don't allow us to set `Temperature`.
-> * We have early support for Raycast! Under the `/patterns` directory there's a `raycast` directory with scripts that can be called from Raycast. If you add a scripts directory within Raycast and point it to your `~/.config/fabric/patterns/raycast` directory, you'll then be able to 1) invoke Raycast, type the name of the script, and then 2) paste in the content to be passed, and the results will return in Raycast. There's currently only one script in there but I am (Daniel) adding more.
-> * **Go Migration: The following command line options were changed during the migration to Go:**
-> * You now need to use the -c option instead of -C to copy the result to the clipboard.
-> * You now need to use the -s option instead of -S to stream results in realtime.
-> * The following command line options have been removed `--agents` (-a), `--gui`, `--clearsession`, `--remoteOllamaServer`, and `--sessionlog`
-> * You can now use (-S) to configure an Ollama server.
-> * **We're working on a GUI rewrite in Go as well**
+> September 15, 2024 — Lots of new stuff!
+>
+> - Fabric now supports calling the new `o1-preview` model using the `-r` switch (which stands for raw. Normal queries won't work with `o1-preview` because they disabled System access and don't allow us to set `Temperature`.
+> - We have early support for Raycast! Under the `/patterns` directory there's a `raycast` directory with scripts that can be called from Raycast. If you add a scripts directory within Raycast and point it to your `~/.config/fabric/patterns/raycast` directory, you'll then be able to 1) invoke Raycast, type the name of the script, and then 2) paste in the content to be passed, and the results will return in Raycast. There's currently only one script in there but I am (Daniel) adding more.
+> - **Go Migration: The following command line options were changed during the migration to Go:**
+> - You now need to use the -c option instead of -C to copy the result to the clipboard.
+> - You now need to use the -s option instead of -S to stream results in realtime.
+> - The following command line options have been removed `--agents` (-a), `--gui`, `--clearsession`, `--remoteOllamaServer`, and `--sessionlog`
+> - You can now use (-S) to configure an Ollama server.
+> - **We're working on a GUI rewrite in Go as well**
 
 ## Intro videos
 
 Keep in mind that many of these were recorded when Fabric was Python-based, so remember to use the current [install instructions](#Installation) below.
 
-* [Network Chuck](https://www.youtube.com/watch?v=UbDyjIIGaxQ)
-* [David Bombal](https://www.youtube.com/watch?v=vF-MQmVxnCs)
-* [My Own Intro to the Tool](https://www.youtube.com/watch?v=wPEyyigh10g)
-* [More Fabric YouTube Videos](https://www.youtube.com/results?search_query=fabric+ai)
+- [Network Chuck](https://www.youtube.com/watch?v=UbDyjIIGaxQ)
+- [David Bombal](https://www.youtube.com/watch?v=vF-MQmVxnCs)
+- [My Own Intro to the Tool](https://www.youtube.com/watch?v=wPEyyigh10g)
+- [More Fabric YouTube Videos](https://www.youtube.com/results?search_query=fabric+ai)
 
 ## What and why
 
@@ -137,7 +146,12 @@ curl -L https://github.com/danielmiessler/fabric/releases/latest/download/fabric
 
 ### From Source
 
-To install Fabric, [make sure Go is installed](https://go.dev/doc/install), and then run the following command.
+To install Fabric, **make sure Go is installed**
+
+- Install via [Official Installer](https://go.dev/doc/install).
+- Macs & Linux: Install via [Homebrew](https://formulae.brew.sh/formula/go)
+
+Then run the following command:
 
 ```bash
 # Install Fabric directly from the repo
@@ -146,9 +160,10 @@ go install github.com/danielmiessler/fabric@latest
 
 ### Environment Variables
 
-You may need to set some environment variables in your `~/.bashrc` on linux or `~/.zshrc` file on mac to be able to run the `fabric` command. Here is an example of what you can add:
+You need to set some environment variables in your `~/.bashrc` on linux or `~/.zshrc` file on mac to be able to run the `fabric` command. Here is an example of what you can add:
 
-For Intel based macs or linux
+For Intel based Macs or Linux who installed Go via **Official Installer**
+
 ```bash
 # Golang environment variables
 export GOROOT=/usr/local/go
@@ -158,7 +173,8 @@ export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$HOME/.local/bin:$PATH
 ```
 
-for Apple Silicon based macs
+for Apple Silicon based Macs or Linux who installed Go via **Homebrew**
+
 ```bash
 # Golang environment variables
 export GOROOT=$(brew --prefix go)/libexec
@@ -166,14 +182,22 @@ export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$HOME/.local/bin:$PATH
 ```
 
+After updating your `rc` file, source the file, then run the following command to confirm your **Go** package is installed correctly:
+
+```bash
+go version
+```
+
 ### Setup
+
 Now run the following command
+
 ```bash
 # Run the setup to set up your directories and keys
 fabric --setup
 ```
-If everything works you are good to go.
 
+If everything works you are good to go.
 
 ### Migration
 
@@ -196,11 +220,13 @@ Then [set your environmental variables](#environmental-variables) as shown above
 ### Upgrading
 
 The great thing about Go is that it's super easy to upgrade. Just run the same command you used to install it in the first place and you'll always get the latest version.
+
 ```bash
 go install github.com/danielmiessler/fabric@latest
 ```
 
 ## Usage
+
 Once you have it all set up, here's how to use it.
 
 ```bash
@@ -328,7 +354,6 @@ When you're ready to use them, copy them into:
 ```
 
 You can then use them like any other Patterns, but they won't be public unless you explicitly submit them as Pull Requests to the Fabric project. So don't worry—they're private to you.
-
 
 This feature works with all openai and ollama models but does NOT work with claude. You can specify your model with the -m flag
 
