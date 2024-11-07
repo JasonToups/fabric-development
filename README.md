@@ -73,7 +73,7 @@
 
 ## Intro videos
 
-Keep in mind that many of these were recorded when Fabric was _Python-based_, so remember to use the current [Go install instructions](##Installation) below.
+Keep in mind that many of these were recorded when Fabric was _Python-based_, so remember to use the current [Go-based install instructions](#installation) below.
 
 - [Network Chuck](https://www.youtube.com/watch?v=UbDyjIIGaxQ)
 - [David Bombal](https://www.youtube.com/watch?v=vF-MQmVxnCs)
